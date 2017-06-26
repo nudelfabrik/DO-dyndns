@@ -7,9 +7,14 @@ import "errors"
 import "io/ioutil"
 import "time"
 import "net/http"
+import "os"
 
 func main() {
-	setting, err := loadSettings("")
+	customPath := ""
+	if len(os.Args) == 2 {
+		customPath = os.Args[1]
+	}
+	setting, err := loadSettings(customPath)
 	if err != nil {
 		fmt.Println(err)
 	}
