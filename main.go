@@ -24,15 +24,26 @@ func main() {
 		return
 	}
 
-	ip, err := getIP()
-	fmt.Println(ip)
+	err = update(client)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	err = client.Update(ip)
+	if setting.StartServer {
+		server(client, setting.Port)
+	}
 
+}
+
+func update(c *DoClient) error {
+	ip, err := getIP()
+	if err != nil {
+		return err
+	}
+
+	err = c.Update(ip)
+	return err
 }
 
 func getIP() (string, error) {

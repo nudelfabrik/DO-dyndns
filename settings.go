@@ -5,9 +5,11 @@ import "encoding/json"
 import "io/ioutil"
 
 type settings struct {
-	Domain    string `json:"domain"`
-	Subdomain string `json:"subdomain"`
-	Token     string `json:"token"`
+	Domain      string `json:"domain"`
+	Subdomain   string `json:"subdomain"`
+	Token       string `json:"token"`
+	StartServer bool   `json:"httpServer"`
+	Port        string `json:"httpPort"`
 }
 
 func loadSettings(altPath string) (*settings, error) {
