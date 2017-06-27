@@ -37,35 +37,55 @@ func main() {
 }
 
 func update(c *DoClient) error {
-	ip, err := getIP()
+	ip4, _, err := getIP(true, false)
 	if err != nil {
 		return err
 	}
 
-	err = c.Update(ip)
+	err = c.Update(ip4)
 	return err
 }
 
-func getIP() (string, error) {
+func getIP(v4, v6 bool) (string, string, error) {
 	var netClient = &http.Client{
 		Timeout: time.Second * 10,
 	}
-	response, err := netClient.Get("http://ipv4.icanhazip.com")
-	if err != nil {
-		return "", err
-	}
-	responseText, err := ioutil.ReadAll(response.Body)
-	response.Body.Close()
-	if err != nil {
-		return "", err
+	req := func(url string) (string, error) {
+		response, err := netClient.Get(url)
+		if err != nil {
+			return "", err
+		}
+
+		responseText, err := ioutil.ReadAll(response.Body)
+		response.Body.Close()
+		if err != nil {
+			return "", err
+		}
+
+		str := string(responseText)
+		str = strings.TrimSpace(str)
+		ip := net.ParseIP(str)
+		if ip == nil {
+			return "", errors.New("Cannot Parse IP: " + str)
+		}
+		return ip.String(), nil
 	}
 
-	str := string(responseText)
-	str = strings.TrimSpace(str)
-	ip := net.ParseIP(str)
-	if ip == nil {
-		return "", errors.New("Cannot Parse IP: " + str)
+	var ip4, ip6 string
+	var err error
+	if v4 {
+		ip4, err = req("http://ipv4.icanhazip.com")
+		if err != nil {
+			return "", "", err
+		}
+	}
+	if v6 {
+		ip6, err = req("http://ipv6.icanhazip.com")
+		if err != nil {
+			return "", "", err
+		}
 	}
 
-	return ip.String(), err
+	return ip4, ip6, nil
+
 }

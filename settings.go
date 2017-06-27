@@ -8,6 +8,8 @@ type settings struct {
 	Domain      string `json:"domain"`
 	Subdomain   string `json:"subdomain"`
 	Token       string `json:"token"`
+	IPv4        bool   `json:"ipv4"`
+	IPv6        bool   `json:"ipv6"`
 	StartServer bool   `json:"httpServer"`
 	Port        string `json:"httpPort"`
 }
