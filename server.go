@@ -1,10 +1,12 @@
 package main
 
-import "net/http"
-import "time"
-import "os/signal"
-import "os"
-import "syscall"
+import (
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+)
 
 func server(c *DoClient, port string) {
 	serveMux := http.NewServeMux()

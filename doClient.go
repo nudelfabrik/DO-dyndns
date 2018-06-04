@@ -1,10 +1,14 @@
 package main
 
-import "github.com/digitalocean/godo"
-import "errors"
-import "golang.org/x/oauth2"
-import "context"
-import "fmt"
+import (
+	"context"
+	"errors"
+	"fmt"
+	"time"
+
+	"github.com/digitalocean/godo"
+	"golang.org/x/oauth2"
+)
 
 type TokenSource struct {
 	AccessToken string

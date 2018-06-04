@@ -1,13 +1,15 @@
 package main
 
-import "net"
-import "strings"
-import "fmt"
-import "errors"
-import "io/ioutil"
-import "time"
-import "net/http"
-import "os"
+import (
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"os"
+	"strings"
+	"time"
+)
 
 func main() {
 	customPath := ""
