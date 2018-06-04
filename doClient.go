@@ -55,7 +55,7 @@ func NewDoClient(setting *settings) (*DoClient, error) {
 func (c *DoClient) Update(ip string) error {
 	if c.lastIP == ip {
 		// Record is up to date
-		fmt.Println(time.Now(), " Record is up to date")
+		fmt.Println(time.Now().Format(time.RFC1123), " Record is up to date")
 		return nil
 	}
 	request := &godo.DomainRecordEditRequest{}
@@ -72,7 +72,7 @@ func (c *DoClient) Update(ip string) error {
 	}
 	if rec != nil {
 		c.lastIP = rec.Data
-		fmt.Println(time.Now(), " Changed IP: ", ip)
+		fmt.Println(time.Now().Format(time.RFC1123), " Changed IP: ", ip)
 	}
 	return err
 }
