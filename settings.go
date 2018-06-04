@@ -1,8 +1,10 @@
 package main
 
-import "errors"
-import "encoding/json"
-import "io/ioutil"
+import (
+	"encoding/json"
+	"errors"
+	"io/ioutil"
+)
 
 type settings struct {
 	Domain      string `json:"domain"`
