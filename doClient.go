@@ -1,6 +1,9 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
@@ -15,8 +18,8 @@ type DoClient struct {
 }
 
 type record struct {
-	TTL    int      `json:rrset_ttl"`
-	Values []string `json:rrset_values"`
+	TTL    int      `json:"rrset_ttl"`
+	Values []string `json:"rrset_values"`
 }
 
 func NewDoClient(setting *settings) (*DoClient, error) {
@@ -41,11 +44,22 @@ func (c *DoClient) Update(ip string) error {
 	request.TTL = 1800
 	request.Values = []string{ip}
 
-	req, err := http.NewRequest("PUT", "https://dns.api.gandi.net/api/v5/domains/"+c.domain+"/records"+c.subdomain+"/A", nil)
+	data, err := json.Marshal(request)
+
+	req, err := http.NewRequest("PUT", "https://dns.api.gandi.net/api/v5/domains/"+c.domain+"/records/"+c.subdomain+"/A", bytes.NewBuffer(data))
 	req.Header.Add("X-Api-Key", c.token)
+	req.Header.Add("Content-Type", "application/json")
 
 	client := &http.Client{}
 
-	_, err = client.Do(req)
-	return err
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+	if resp.StatusCode != 201 {
+		return errors.New(resp.Status)
+	}
+
+	fmt.Println(time.Now().Format(time.RFC1123), " Changed IP: ", ip)
+	return nil
 }
