@@ -1,4 +1,5 @@
 {
+    "API": "gandi",
     "domain": "example.com",
     "subdomain": "dyndns",
     "token": "YOUR TOKEN HERE",

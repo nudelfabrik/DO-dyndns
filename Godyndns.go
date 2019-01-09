@@ -2,15 +2,33 @@ package GOdyndns
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/nudelfabrik/GOdyndns/Digitalocean"
+	"github.com/nudelfabrik/GOdyndns/Gandi"
+	"github.com/nudelfabrik/GOdyndns/settings"
 )
 
 type Client interface {
 	Update(string) error
+}
+
+func CreateClient(setting *settings.Settings) (Client, error) {
+
+	switch setting.API {
+	case "Gandi", "gandi":
+		return Gandi.NewGandiClient(setting)
+	case "DO", "do", "DigitalOcean", "digitalocean":
+		return Digitalocean.NewDoClient(setting)
+	default:
+		return nil, fmt.Errorf("Not supported API endpoint: %s", setting.API)
+	}
+
 }
 
 func Update(c Client) error {

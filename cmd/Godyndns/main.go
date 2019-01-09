@@ -9,7 +9,6 @@ import (
 	"syscall"
 
 	"github.com/nudelfabrik/GOdyndns"
-	"github.com/nudelfabrik/GOdyndns/Gandi"
 	"github.com/nudelfabrik/GOdyndns/settings"
 )
 
@@ -27,8 +26,10 @@ func main() {
 	setting, err := settings.LoadSettings(*config)
 	if err != nil {
 		fmt.Println(err)
+		return
 	}
-	client, err := Gandi.NewGandiClient(setting)
+
+	client, err := GOdyndns.CreateClient(setting)
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -7,6 +7,7 @@ import (
 )
 
 type Settings struct {
+	API         string `json:"API"`
 	Domain      string `json:"domain"`
 	Subdomain   string `json:"subdomain"`
 	Token       string `json:"token"`
