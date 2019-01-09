@@ -18,7 +18,7 @@ type Settings struct {
 func LoadSettings(altPath string) (*Settings, error) {
 	var file []byte
 	var err error
-	paths := []string{"/usr/local/etc/do-dyndns.json", "./do-dyndns.json"}
+	paths := []string{"/usr/local/etc/godyndns.json", "./godyndns.json"}
 	if altPath != "" {
 		// Use the explicitly specified path
 		file, err = ioutil.ReadFile(altPath)
