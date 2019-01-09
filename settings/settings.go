@@ -1,4 +1,4 @@
-package main
+package settings
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"io/ioutil"
 )
 
-type settings struct {
+type Settings struct {
 	Domain      string `json:"domain"`
 	Subdomain   string `json:"subdomain"`
 	Token       string `json:"token"`
@@ -14,7 +14,7 @@ type settings struct {
 	Port        string `json:"httpPort"`
 }
 
-func loadSettings(altPath string) (*settings, error) {
+func LoadSettings(altPath string) (*Settings, error) {
 	var file []byte
 	var err error
 	paths := []string{"/usr/local/etc/do-dyndns.json", "./do-dyndns.json"}
@@ -34,7 +34,7 @@ func loadSettings(altPath string) (*settings, error) {
 		return nil, errors.New("No File found")
 	}
 
-	var setting settings
+	var setting Settings
 	err = json.Unmarshal(file, &setting)
 	return &setting, err
 }

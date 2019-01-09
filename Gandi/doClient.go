@@ -1,4 +1,4 @@
-package main
+package Gandi
 
 import (
 	"bytes"
@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"net/http"
 	"time"
+
+	"github.com/nudelfabrik/GOdyndns/settings"
 )
 
-type DoClient struct {
+type GandiClient struct {
 	domain    string
 	subdomain string
 	recordID  int
@@ -22,18 +24,18 @@ type record struct {
 	Values []string `json:"rrset_values"`
 }
 
-func NewDoClient(setting *settings) (*DoClient, error) {
-	doClient := &DoClient{}
+func NewGandiClient(setting *settings.Settings) (*GandiClient, error) {
+	client := &GandiClient{}
 
-	doClient.token = setting.Token
-	doClient.domain = setting.Domain
-	doClient.subdomain = setting.Subdomain
+	client.token = setting.Token
+	client.domain = setting.Domain
+	client.subdomain = setting.Subdomain
 	setting.Token = ""
 
-	return doClient, nil
+	return client, nil
 }
 
-func (c *DoClient) Update(ip string) error {
+func (c *GandiClient) Update(ip string) error {
 	if c.lastIP == ip {
 		// Record is up to date
 		fmt.Println(time.Now().Format(time.RFC1123), " Record is up to date")

@@ -1,4 +1,4 @@
-package main
+package GOdyndns
 
 import (
 	"net/http"
@@ -8,11 +8,11 @@ import (
 	"time"
 )
 
-func server(c *DoClient, port string) {
+func Server(c Client, port string) {
 	serveMux := http.NewServeMux()
 
 	serveMux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-		update(c)
+		Update(c)
 		w.WriteHeader(200)
 	})
 

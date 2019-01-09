@@ -1,17 +1,16 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
-	"net"
-	"net/http"
 	"os"
 	"strconv"
-	"strings"
 	"syscall"
-	"time"
+
+	"github.com/nudelfabrik/GOdyndns"
+	"github.com/nudelfabrik/GOdyndns/Gandi"
+	"github.com/nudelfabrik/GOdyndns/settings"
 )
 
 func main() {
@@ -25,60 +24,26 @@ func main() {
 		writePidFile(*pid)
 	}
 
-	setting, err := loadSettings(*config)
+	setting, err := settings.LoadSettings(*config)
 	if err != nil {
 		fmt.Println(err)
 	}
-	client, err := NewDoClient(setting)
+	client, err := Gandi.NewGandiClient(setting)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	err = update(client)
+	err = GOdyndns.Update(client)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	if setting.StartServer {
-		server(client, setting.Port)
+		GOdyndns.Server(client, setting.Port)
 	}
 
-}
-
-func update(c *DoClient) error {
-	ip, err := getIP()
-	if err != nil {
-		return err
-	}
-
-	err = c.Update(ip)
-	return err
-}
-
-func getIP() (string, error) {
-	var netClient = &http.Client{
-		Timeout: time.Second * 10,
-	}
-	response, err := netClient.Get("http://ipv4.icanhazip.com")
-	if err != nil {
-		return "", err
-	}
-	responseText, err := ioutil.ReadAll(response.Body)
-	response.Body.Close()
-	if err != nil {
-		return "", err
-	}
-
-	str := string(responseText)
-	str = strings.TrimSpace(str)
-	ip := net.ParseIP(str)
-	if ip == nil {
-		return "", errors.New("Cannot Parse IP: " + str)
-	}
-
-	return ip.String(), err
 }
 
 // Write a pid file, but first make sure it doesn't exist with a running pid.
