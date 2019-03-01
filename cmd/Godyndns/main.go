@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	config := flag.String("f", "/usr/local/etc/DO-dyndns.json", "JSON Config file")
+	config := flag.String("f", "/usr/local/etc/godyndns.json", "JSON Config file")
 	pid := flag.String("p", "", "Pid File")
 
 	flag.Parse()
