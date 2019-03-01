@@ -49,12 +49,14 @@ func TCPServer(c Client, port string) {
 	defer l.Close()
 	for {
 		// Listen for an incoming connection.
-		_, err := l.Accept()
+		conn, err := l.Accept()
 		if err != nil {
 			fmt.Println("Error accepting: ", err.Error())
 			os.Exit(1)
 		}
 		// Handle connections in a new goroutine.
 		go Update(c)
+		conn.Close()
+
 	}
 }
