@@ -12,6 +12,7 @@ type Settings struct {
 	Subdomain   string `json:"subdomain"`
 	Token       string `json:"token"`
 	StartServer bool   `json:"httpServer"`
+	ServerType  string `json:"ServerType"`
 	Port        string `json:"httpPort"`
 }
 

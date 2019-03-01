@@ -42,7 +42,11 @@ func main() {
 	}
 
 	if setting.StartServer {
-		GOdyndns.Server(client, setting.Port)
+		if setting.ServerType == "tcp" {
+			GOdyndns.TCPServer(client, setting.Port)
+		} else {
+			GOdyndns.HTTPServer(client, setting.Port)
+		}
 	}
 
 }

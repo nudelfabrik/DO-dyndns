@@ -1,6 +1,8 @@
 package GOdyndns
 
 import (
+	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -8,7 +10,7 @@ import (
 	"time"
 )
 
-func Server(c Client, port string) {
+func HTTPServer(c Client, port string) {
 	serveMux := http.NewServeMux()
 
 	serveMux.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
@@ -34,4 +36,25 @@ func Server(c Client, port string) {
 
 	httpServer.ListenAndServe()
 
+}
+
+func TCPServer(c Client, port string) {
+	// Listen for incoming connections.
+	l, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		fmt.Println("Error listening:", err.Error())
+		os.Exit(1)
+	}
+	// Close the listener when the application closes.
+	defer l.Close()
+	for {
+		// Listen for an incoming connection.
+		_, err := l.Accept()
+		if err != nil {
+			fmt.Println("Error accepting: ", err.Error())
+			os.Exit(1)
+		}
+		// Handle connections in a new goroutine.
+		go Update(c)
+	}
 }
